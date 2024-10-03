@@ -31,20 +31,25 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void purchaseTickets(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
 
-        validateAccount(accountId);
+        try {
+            validateAccount(accountId);
 
-        TicketOrderSummary ticketOrderSummary = createOrderSummary(ticketTypeRequests);
+            TicketOrderSummary ticketOrderSummary = createOrderSummary(ticketTypeRequests);
 
-        if(ticketOrderSummary.getTotalNumberOfTickets() > MAX_TICKETS_ALLOWED) {
-            throw new InvalidPurchaseException("Cannot purchase more than 25 tickets in single order.");
+            if (ticketOrderSummary.getTotalNumberOfTickets() > MAX_TICKETS_ALLOWED) {
+                throw new InvalidPurchaseException("Cannot purchase more than 25 tickets in single order.");
+            }
+
+            if (!ticketOrderSummary.isAdultTicketAvailable()) {
+                throw new InvalidPurchaseException("At least one adult ticket is required.");
+            }
+
+            seatReservationService.reserveSeat(accountId, ticketOrderSummary.getTotalNumberOfTickets());
+            ticketPaymentService.makePayment(accountId, ticketOrderSummary.getTotalTicketPrice());
+
+        } catch (Exception e){
+            throw new InvalidPurchaseException(e.getMessage());
         }
-
-        if(!ticketOrderSummary.isAdultTicketAvailable()){
-            throw new InvalidPurchaseException("At least one adult ticket is required.");
-        }
-
-        seatReservationService.reserveSeat(accountId, ticketOrderSummary.getTotalNumberOfTickets());
-        ticketPaymentService.makePayment(accountId, ticketOrderSummary.getTotalTicketPrice());
     }
 
     private void validateAccount(Long accountId) throws InvalidPurchaseException {

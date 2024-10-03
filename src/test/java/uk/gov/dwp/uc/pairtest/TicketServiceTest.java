@@ -5,7 +5,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import thirdparty.paymentgateway.TicketPaymentService;
@@ -79,6 +78,20 @@ public class TicketServiceTest {
 
         exceptionRule.expect(InvalidPurchaseException.class);
         exceptionRule.expectMessage("Cannot purchase more than 25 tickets in single order.");
+        ticketService.purchaseTickets(accountId, adultTicketRequest, childTicketRequest);
+
+        verify(seatReservationService, never()).reserveSeat(anyLong(), anyInt());
+        verify(ticketPaymentService, never()).makePayment(anyLong(), anyInt());
+    }
+
+    @Test
+    public void testPurchaseTicketsWithInvalidTicketTypeShouldThrowException() {
+        Long accountId = 1L;
+        TicketTypeRequest adultTicketRequest = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 2);
+        TicketTypeRequest childTicketRequest = new TicketTypeRequest(null, 2);
+
+        exceptionRule.expect(InvalidPurchaseException.class);
+        exceptionRule.expectMessage("Unknown ticket type");
         ticketService.purchaseTickets(accountId, adultTicketRequest, childTicketRequest);
 
         verify(seatReservationService, never()).reserveSeat(anyLong(), anyInt());
