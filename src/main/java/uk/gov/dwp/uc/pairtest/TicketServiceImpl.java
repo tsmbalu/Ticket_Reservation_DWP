@@ -8,6 +8,8 @@ import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.dto.TicketOrderSummary;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 
+import java.text.MessageFormat;
+
 /**
  * This class provides ticket booking services for various types of tickets
  * such as adult, child, and infant tickets. It validates ticket requests
@@ -35,7 +37,7 @@ public class TicketServiceImpl implements TicketService {
     /**
      * This method is to purchase tickets
      *
-     * @param accountId          account id of the app
+     * @param accountId  account id of the user
      * @param ticketTypeRequests ticket request with type of tickets and quantity of tickets
      * @throws InvalidPurchaseException
      */
@@ -48,7 +50,7 @@ public class TicketServiceImpl implements TicketService {
             TicketOrderSummary ticketOrderSummary = createOrderSummary(ticketTypeRequests);
 
             if (ticketOrderSummary.getTotalNumberOfTickets() > MAX_TICKETS_ALLOWED) {
-                throw new InvalidPurchaseException("Cannot purchase more than 25 tickets in single order.");
+                throw new InvalidPurchaseException(MessageFormat.format("Cannot purchase more than {0} tickets in single order.", MAX_TICKETS_ALLOWED));
             }
 
             if (!ticketOrderSummary.isAdultTicketAvailable()) {
@@ -89,6 +91,10 @@ public class TicketServiceImpl implements TicketService {
         int totalSeat = 0;
         boolean isAdultTicketAvailableInOrder = false;
         for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
+
+            if(ticketTypeRequest == null){
+                throw new InvalidPurchaseException("Invalid ticket request.");
+            }
 
             TicketReservationStrategy ticketReservationStrategy = TicketStrategyFactory.getStrategy(ticketTypeRequest.getTicketType());
 

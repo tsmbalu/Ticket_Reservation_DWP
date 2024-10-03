@@ -42,6 +42,19 @@ public class TicketServiceTest {
     }
 
     @Test
+    public void testPurchaseTicketsWithNullValueShouldThrowException(){
+        Long accountId = 1L;
+        TicketTypeRequest ticketTypeRequest = null;
+
+        exceptionRule.expect(InvalidPurchaseException.class);
+        exceptionRule.expectMessage("Invalid ticket request.");
+        ticketService.purchaseTickets(accountId, ticketTypeRequest);
+
+        verify(seatReservationService, never()).reserveSeat(anyLong(), anyInt());
+        verify(ticketPaymentService, never()).makePayment(anyLong(), anyInt());
+    }
+
+    @Test
     public void testPurchaseTicketsWithInvalidAccountIdShouldThrowException() {
         Long invalidAccountId = 0L;
         TicketTypeRequest adultTicketRequest = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
