@@ -4,25 +4,15 @@ public class TicketOrderSummary {
 
     private int totalTicketPrice;
     private int totalNumberOfTickets;
+    private int totalSeat;
     private boolean adultTicketAvailable;
 
     public TicketOrderSummary(){}
 
-    public TicketOrderSummary(int totalTicketPrice, int totalNumberOfTickets, boolean adultTicketAvailable) {
+    public TicketOrderSummary(int totalTicketPrice, int totalNumberOfTickets, int totalSeat, boolean adultTicketAvailable) {
         this.totalTicketPrice = totalTicketPrice;
         this.totalNumberOfTickets = totalNumberOfTickets;
-        this.adultTicketAvailable = adultTicketAvailable;
-    }
-
-    public void setTotalTicketPrice(int totalTicketPrice) {
-        this.totalTicketPrice = totalTicketPrice;
-    }
-
-    public void setTotalNumberOfTickets(int totalNumberOfTickets) {
-        this.totalNumberOfTickets = totalNumberOfTickets;
-    }
-
-    public void setAdultTicketAvailable(boolean adultTicketAvailable) {
+        this.totalSeat = totalSeat;
         this.adultTicketAvailable = adultTicketAvailable;
     }
 
@@ -30,12 +20,31 @@ public class TicketOrderSummary {
         return totalTicketPrice;
     }
 
+    public void setTotalTicketPrice(int totalTicketPrice) {
+        this.totalTicketPrice = totalTicketPrice;
+    }
+
     public int getTotalNumberOfTickets() {
         return totalNumberOfTickets;
+    }
+
+    public void setTotalNumberOfTickets(int totalNumberOfTickets) {
+        this.totalNumberOfTickets = totalNumberOfTickets;
+    }
+
+    public int getTotalSeat() {
+        return totalSeat;
+    }
+
+    public void setTotalSeat(int totalSeat) {
+        this.totalSeat = totalSeat;
     }
 
     public boolean isAdultTicketAvailable() {
         return adultTicketAvailable;
     }
 
+    public void setAdultTicketAvailable(boolean adultTicketAvailable) {
+        this.adultTicketAvailable = adultTicketAvailable;
+    }
 }

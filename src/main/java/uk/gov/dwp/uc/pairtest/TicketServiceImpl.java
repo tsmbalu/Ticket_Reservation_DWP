@@ -22,12 +22,12 @@ public class TicketServiceImpl implements TicketService {
     private SeatReservationService seatReservationService;
     private TicketPaymentService ticketPaymentService;
 
-    public TicketServiceImpl(){
+    public TicketServiceImpl() {
         this.seatReservationService = new SeatReservationServiceImpl();
         this.ticketPaymentService = new TicketPaymentServiceImpl();
     }
 
-    public TicketServiceImpl(SeatReservationService seatReservationService, TicketPaymentService ticketPaymentService){
+    public TicketServiceImpl(SeatReservationService seatReservationService, TicketPaymentService ticketPaymentService) {
         this.seatReservationService = seatReservationService;
         this.ticketPaymentService = ticketPaymentService;
     }
@@ -35,7 +35,7 @@ public class TicketServiceImpl implements TicketService {
     /**
      * This method is to purchase tickets
      *
-     * @param accountId account id of the app
+     * @param accountId          account id of the app
      * @param ticketTypeRequests ticket request with type of tickets and quantity of tickets
      * @throws InvalidPurchaseException
      */
@@ -55,10 +55,10 @@ public class TicketServiceImpl implements TicketService {
                 throw new InvalidPurchaseException("At least one adult ticket is required.");
             }
 
-            seatReservationService.reserveSeat(accountId, ticketOrderSummary.getTotalNumberOfTickets());
+            seatReservationService.reserveSeat(accountId, ticketOrderSummary.getTotalSeat());
             ticketPaymentService.makePayment(accountId, ticketOrderSummary.getTotalTicketPrice());
 
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new InvalidPurchaseException(e.getMessage());
         }
     }
@@ -86,20 +86,23 @@ public class TicketServiceImpl implements TicketService {
     private TicketOrderSummary createOrderSummary(TicketTypeRequest... ticketTypeRequests) {
         int totalTicketPrice = 0;
         int totalNumberOfTicket = 0;
+        int totalSeat = 0;
         boolean isAdultTicketAvailableInOrder = false;
-                for(TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
+        for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
 
-            TicketPricingStrategy ticketPricingStrategy = TicketPricingStrategyFactory.getStrategy(ticketTypeRequest.getTicketType());
+            TicketReservationStrategy ticketReservationStrategy = TicketStrategyFactory.getStrategy(ticketTypeRequest.getTicketType());
 
-            totalTicketPrice += ticketPricingStrategy.calculatePrice(ticketTypeRequest.getNoOfTickets());
+            int noOfTicket = ticketTypeRequest.getNoOfTickets();
+            totalTicketPrice += ticketReservationStrategy.calculatePrice(noOfTicket);
+            totalSeat += ticketReservationStrategy.calculateTotalSeat(noOfTicket);
             totalNumberOfTicket += ticketTypeRequest.getNoOfTickets();
 
-            if (ticketPricingStrategy.isAdultTicket()) {
+            if (ticketReservationStrategy.isAdultTicket()) {
                 isAdultTicketAvailableInOrder = true;
             }
         }
 
-        return new TicketOrderSummary(totalTicketPrice, totalNumberOfTicket, isAdultTicketAvailableInOrder);
+        return new TicketOrderSummary(totalTicketPrice, totalNumberOfTicket, totalSeat, isAdultTicketAvailableInOrder);
     }
 
 }

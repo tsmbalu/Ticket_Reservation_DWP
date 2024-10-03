@@ -1,9 +1,14 @@
 package uk.gov.dwp.uc.pairtest;
 
-public class InfantTicketPricingStrategy implements TicketPricingStrategy {
+public class InfantTicketReservationStrategy implements TicketReservationStrategy {
 
     @Override
     public int calculatePrice(int numberOfTickets) {
+        return 0;
+    }
+
+    @Override
+    public int calculateTotalSeat(int numberOfTickets) {
         return 0;
     }
 

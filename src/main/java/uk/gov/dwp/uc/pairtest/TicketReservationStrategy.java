@@ -1,6 +1,7 @@
 package uk.gov.dwp.uc.pairtest;
 
-public interface TicketPricingStrategy {
+public interface TicketReservationStrategy {
     int calculatePrice(int numberOfTickets);
+    int calculateTotalSeat(int numberOfTickets);
     boolean isAdultTicket();
 }

@@ -9,28 +9,28 @@ import static org.hamcrest.CoreMatchers.*;
 public class TicketPricingStrategyFactoryTest {
     @Test
     public void testGetStrategyForAdult() {
-        TicketPricingStrategy strategy = TicketPricingStrategyFactory.getStrategy(TicketTypeRequest.Type.ADULT);
+        TicketReservationStrategy strategy = TicketStrategyFactory.getStrategy(TicketTypeRequest.Type.ADULT);
 
-        assertThat(strategy, instanceOf(AdultTicketPricingStrategy.class));
+        assertThat(strategy, instanceOf(AdultTicketReservationStrategy.class));
     }
 
     @Test
     public void testGetStrategyForChild() {
-        TicketPricingStrategy strategy = TicketPricingStrategyFactory.getStrategy(TicketTypeRequest.Type.CHILD);
+        TicketReservationStrategy strategy = TicketStrategyFactory.getStrategy(TicketTypeRequest.Type.CHILD);
 
-        assertThat(strategy, instanceOf(ChildTicketPricingStrategy.class));
+        assertThat(strategy, instanceOf(ChildTicketReservationStrategy.class));
     }
 
     @Test
     public void testGetStrategyForInfant() {
-        TicketPricingStrategy strategy = TicketPricingStrategyFactory.getStrategy(TicketTypeRequest.Type.INFANT);
+        TicketReservationStrategy strategy = TicketStrategyFactory.getStrategy(TicketTypeRequest.Type.INFANT);
 
-        assertThat(strategy, instanceOf(InfantTicketPricingStrategy.class));
+        assertThat(strategy, instanceOf(InfantTicketReservationStrategy.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetStrategyForNull() {
-        TicketPricingStrategyFactory.getStrategy(null);
+        TicketStrategyFactory.getStrategy(null);
     }
 
 }

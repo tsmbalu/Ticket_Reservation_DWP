@@ -35,10 +35,9 @@ public class TicketServiceTest {
         TicketTypeRequest ticketTypeRequest2 = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 1);
         TicketTypeRequest ticketTypeRequest3 = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 2);
 
-
         ticketService.purchaseTickets(accountId, ticketTypeRequest1, ticketTypeRequest2, ticketTypeRequest3);
 
-        verify(seatReservationService, times(1)).reserveSeat(accountId, 7);
+        verify(seatReservationService, times(1)).reserveSeat(accountId, 5);
         verify(ticketPaymentService, times(1)).makePayment(accountId, 115);
     }
 
