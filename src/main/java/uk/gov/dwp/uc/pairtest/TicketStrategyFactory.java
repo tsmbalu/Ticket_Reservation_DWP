@@ -3,13 +3,13 @@ package uk.gov.dwp.uc.pairtest;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 
 /**
- * This class is the factory class for Ticket pricing strategy.
- * Based on the ticket type corresponding pricing strategy will be applied
+ * This class is the factory class for Ticket reservation strategy.
+ * Based on the ticket type corresponding reservation strategy will be applied
  */
 public class TicketStrategyFactory {
 
     /**
-     * Factory method for pricing strategy
+     * Factory method for initializing strategy based ticket type
      *
      * @param type Ticket Type
      * @return
